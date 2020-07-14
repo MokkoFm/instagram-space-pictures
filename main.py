@@ -82,7 +82,7 @@ def main():
     load_dotenv()
     download_picture("https://upload.wikimedia.org/wikipedia/commons/3/3f/HST-SM4.jpeg")
     download_hubble_pictures("1")
-    #download_hubble_collection("spacecraft")
+    download_hubble_collection("spacecraft")
     fetch_spacex_last_launch()
 
     insta_login = os.getenv("LOGIN")
