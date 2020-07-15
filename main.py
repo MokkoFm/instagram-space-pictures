@@ -13,8 +13,7 @@ import os.path
 from pathlib import Path
 
 
-def download_picture(url):
-    filename = Path('images', 'hubble.jpg')
+def download_picture(url, filename):
     response = requests.get(url)
     response.raise_for_status()
     with open(filename, 'wb') as file:
@@ -28,10 +27,10 @@ def fetch_spacex_last_launch():
     spacex_pictures = response.json()['links']['flickr_images']
 
     for picture_number, picture in enumerate(spacex_pictures):
-        file_with_picture = Path('images', 'spacex{}.jpg'.format(picture_number))
+        filename = Path('./images', 'spacex{}.jpg'.format(picture_number))
         response = requests.get(spacex_pictures[picture_number])
 
-        with open(file_with_picture, 'wb') as file:
+        with open(filename, 'wb') as file:
             file.write(response.content)
 
 
@@ -45,12 +44,12 @@ def download_hubble_pictures(id_image):
         link = picture['file_url']
         url = "https:" + link
         split_pictures = link.split('.')
-        filename = Path('images', 'hubble{}.{}'.format(id_image, split_pictures[-1]))
+        filename = Path('./images', 'hubble{}.{}'.format(id_image, split_pictures[-1]))
         response = requests.get(url)
         response.raise_for_status()
 
-    with open(filename, 'wb') as file:
-        file.write(response.content)
+        with open(filename, 'wb') as file:
+            file.write(response.content)
 
 
 def download_hubble_collection(collection):
@@ -64,12 +63,12 @@ def download_hubble_collection(collection):
         url = f"http://hubblesite.org/api/v3/image/{image_id}"
         response = requests.get(url)
         response.raise_for_status()
-        hubble_collection = response.json()['image_files']
+        hubble_images = response.json()['image_files']
 
-        for picture in hubble_collection:
+        for picture in hubble_images:
             link = picture['file_url']
             url = "https:" + link
-            filename = Path('collection', 'hubble-{}-{}.jpg'.format(collection, image_id))
+            filename = Path('./collection', 'hubble-{}-{}.jpg'.format(collection, image_id))
             response = requests.get(url)
             response.raise_for_status()
 
@@ -78,9 +77,8 @@ def download_hubble_collection(collection):
 
 
 def main():
-    os.chdir("C:/Users/mokko/Desktop/space-bot/space-pictures")
     load_dotenv()
-    download_picture("https://upload.wikimedia.org/wikipedia/commons/3/3f/HST-SM4.jpeg")
+    download_picture("https://upload.wikimedia.org/wikipedia/commons/3/3f/HST-SM4.jpeg", Path('./images', 'hubble.jpg'))
     download_hubble_pictures("1")
     download_hubble_collection("spacecraft")
     fetch_spacex_last_launch()
@@ -92,10 +90,10 @@ def main():
 
     pictures_to_instagram = []
 
-    for file_name in os.walk(Path('images')):
+    for file_name in os.walk(Path('./images')):
         pictures_to_instagram.append(file_name)
 
-    for file_name in os.walk(Path('collection')):
+    for file_name in os.walk(Path('./collection')):
         pictures_to_instagram.append(file_name)
 
     for address, dirs, file_names in pictures_to_instagram:
