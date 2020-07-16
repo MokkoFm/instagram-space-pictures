@@ -48,8 +48,8 @@ def download_hubble_pictures(id_image):
         response = requests.get(url)
         response.raise_for_status()
 
-        with open(filename, 'wb') as file:
-            file.write(response.content)
+    with open(filename, 'wb') as file:
+        file.write(response.content)
 
 
 def download_hubble_collection(collection):
